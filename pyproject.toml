@@ -22,12 +22,15 @@ classifiers = [
     "Development Status :: 1 - Planning",
     "Programming Language :: Python :: 3.8",
     "Topic :: Communications :: Chat"
-] 
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+"discord.py" = "^1.3.3"
+coloredlogs = "^14.0"
 
 [tool.poetry.dev-dependencies]
+pytest = "^5.4.1"
 
 [build-system]
 requires = ["poetry>=0.12"]
