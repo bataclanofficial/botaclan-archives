@@ -9,6 +9,9 @@ WORKDIR /botaclan
 COPY pyproject.toml* ./
 
 RUN poetry config virtualenvs.create false \
- && poetry install
+    && poetry install
 
 COPY . .
+
+ENTRYPOINT [ "python" ]
+CMD ["-m", "botaclan"]
