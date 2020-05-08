@@ -1,3 +1,13 @@
 import botaclan.constants
+import discord
+import logging
 
-print(botaclan.constants.DISCORD_TOKEN)
+client = discord.Client()
+
+
+@client.event
+async def on_ready():
+    logging.info(f"{client.user} connected.")
+
+
+client.run(botaclan.constants.DISCORD_TOKEN)
