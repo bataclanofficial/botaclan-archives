@@ -10,7 +10,7 @@ v.bind_env("discord.token")
 v.bind_env("feature.roulette")
 v.bind_env("log.level")
 
-v.set_default("command.prefix", "~b")
+v.set_default("command.prefix", "~b ")
 v.set_default("feature.roulette", True)
 v.set_default("log.level", logging.INFO)
 
