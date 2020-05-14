@@ -11,7 +11,7 @@ class Roulette(Cog):
         self.bot = bot
 
     @command(name="options")
-    async def options(self, ctx: Context, content: str):
+    async def options(self, ctx: Context, *, content: str):
         items = botaclan.helpers.parse_comma_list_message(content)
         chosen = random.choice(items)
         log.debug(f"Message({ctx.message.id} - options - {content}) {chosen}")
