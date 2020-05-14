@@ -3,7 +3,11 @@ import botaclan.constants
 import discord
 import logging
 
-bot = commands.Bot(command_prefix=botaclan.constants.COMMAND_PREFIX)
+bot = commands.Bot(
+    command_prefix=botaclan.constants.COMMAND_PREFIX, case_insensitive=True
+)
+if botaclan.constants.FEATURE_ROULETTE:
+    bot.load_extension("botaclan.cogs.roulette")
 
 
 @bot.event
