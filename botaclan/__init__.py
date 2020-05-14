@@ -7,14 +7,13 @@ log_format = logging.Formatter("%(asctime)s | %(name)s | %(levelname)s | %(messa
 
 root_log = logging.getLogger()
 root_log.setLevel(botaclan.constants.LOG_LEVEL)
-coloredlogs.install(logger=root_log, stream=sys.stdout)
+coloredlogs.install(
+    logger=root_log, stream=sys.stdout, level=botaclan.constants.LOG_LEVEL
+)
 
-logging.getLogger("discord").setLevel(logging.WARNING)
-logging.getLogger("websockets").setLevel(logging.WARNING)
+logging.getLogger("asyncio").setLevel(botaclan.constants.LOG_ASYNCIO_LEVEL)
+logging.getLogger("discord").setLevel(botaclan.constants.LOG_DISCORD_LEVEL)
+logging.getLogger("websockets").setLevel(botaclan.constants.LOG_WEBSOCKETS_LEVEL)
 logging.getLogger(__name__)
 
-logging.debug(f"command.prefix={botaclan.constants.COMMAND_PREFIX}")
-logging.debug(f"discord.guild.id={botaclan.constants.DISCORD_GUILD_ID}")
-logging.debug(f"discord.token={botaclan.constants.DISCORD_TOKEN}")
-logging.debug(f"feature.roulette={botaclan.constants.FEATURE_ROULETTE}")
-logging.debug(f"log.level={botaclan.constants.LOG_LEVEL}")
+botaclan.constants.log_configuration()

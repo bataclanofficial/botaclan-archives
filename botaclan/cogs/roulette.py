@@ -3,6 +3,8 @@ import botaclan.helpers
 import random
 import logging
 
+log = logging.getLogger(__name__)
+
 
 class Roulette(Cog):
     def __init__(self, bot: Bot):
@@ -12,7 +14,7 @@ class Roulette(Cog):
     async def options(self, ctx: Context, content: str):
         items = botaclan.helpers.parse_comma_list_message(content)
         chosen = random.choice(items)
-        logging.info(f"Message({ctx.message.id} - options - {content}) {chosen}")
+        log.debug(f"Message({ctx.message.id} - options - {content}) {chosen}")
         await ctx.send(content=f"I choose {chosen}")
 
 
