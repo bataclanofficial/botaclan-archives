@@ -1,4 +1,4 @@
-from discord.ext.commands import Cog, Bot, Context, command
+from discord.ext.commands import Cog, Bot, Context, command, group
 import botaclan.helpers
 import random
 import logging
@@ -10,7 +10,12 @@ class Roulette(Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    @command(name="options")
+    @group(name="roulette")
+    async def roulette_group(self, ctx: Context):
+        if ctx.invoked_subcommand is None:
+            await ctx.send(content="Roulette help here")
+
+    @roulette_group.command(name="options")
     async def options(self, ctx: Context, *, content: str):
         items = botaclan.helpers.parse_comma_list_message(content)
         chosen = random.choice(items)
