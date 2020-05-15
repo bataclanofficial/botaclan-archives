@@ -7,21 +7,11 @@ log = logging.getLogger(__name__)
 def set_env():
     v.set_env_prefix("botaclan")
     v.set_env_key_replacer(".", "_")
-
-    v.bind_env("command.prefix")
-    v.bind_env("discord.guild.id")
-    v.bind_env("discord.token")
-    v.bind_env("feature.roulette")
-    v.bind_env("feature.calendar")
-    v.bind_env("googleapi.application.credentials")
-    v.bind_env("googleapi.calendar.id")
-    v.bind_env("log.asyncio.level")
-    v.bind_env("log.discord.level")
-    v.bind_env("log.level")
-    v.bind_env("log.websockets.level")
+    v.automatic_env()
 
 
 def set_env_defaults():
+    v.set_config_type("yaml")
     v.set_default("command.prefix", "~b ")
     v.set_default("feature.calendar", True)
     v.set_default("feature.roulette", True)
