@@ -9,6 +9,9 @@ bot = commands.Bot(
 if botaclan.constants.FEATURE_ROULETTE:
     bot.load_extension("botaclan.cogs.roulette")
 
+if botaclan.constants.FEATURE_CALENDAR:
+    bot.load_extension("botaclan.cogs.calendar")
+
 
 @bot.event
 async def on_ready():
