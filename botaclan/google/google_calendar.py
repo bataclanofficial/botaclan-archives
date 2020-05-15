@@ -1,17 +1,15 @@
-from __future__ import print_function
-import datetime
-from googleapiclient.discovery import build
 from google.oauth2 import service_account
+from googleapiclient.discovery import build
 import botaclan.constants
+import datetime
+import logging
+
+log = logging.getLogger(__name__)
 
 
-def main():
-    creds = service_account.Credentials.from_service_account_file(
-        botaclan.constants.GOOGLEAPI_APPLICATION_CREDENTIALS
-    )
-    cal = build("calendar", "v3", credentials=creds, cache_discovery=False)
+def list_events(credentials: service_account.Credentials):
+    cal = build("calendar", "v3", credentials=credentials, cache_discovery=False)
     now = datetime.datetime.utcnow().isoformat() + "Z"
-    print("Getting the upcoming 10 events")
     events_result = (
         cal.events()
         .list(
@@ -24,12 +22,7 @@ def main():
         .execute()
     )
     events = events_result.get("items", [])
-
-    if not events:
-        print("No upcoming events found.")
-    for event in events:
-        start = event["start"].get("dateTime", event["start"].get("date"))
-        print(start, event["summary"])
+    return events
 
 
 if __name__ == "__main__":
