@@ -32,6 +32,7 @@ vyper-config = "^0.6.2"
 google-api-python-client = "^1.8.3"
 google-auth-httplib2 = "^0.0.3"
 google-auth-oauthlib = "^0.4.1"
+dateparser = "^0.7.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.1"
