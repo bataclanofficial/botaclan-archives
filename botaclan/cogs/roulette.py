@@ -1,5 +1,5 @@
-from discord.ext.commands import Cog, Bot, Context, command, group
-import botaclan.helpers
+from discord.ext.commands import Cog, Bot, Context, group
+import botaclan.helpers.text
 import random
 import logging
 
@@ -17,7 +17,7 @@ class Roulette(Cog):
 
     @roulette_group.command(name="options")
     async def options(self, ctx: Context, *, content: str):
-        items = botaclan.helpers.parse_comma_list_message(content)
+        items = botaclan.helpers.text.parse_comma_list_message(content)
         chosen = random.choice(items)
         log.debug(f"Message({ctx.message.id} - options - {content}) {chosen}")
         await ctx.send(content=f"I choose {chosen}")
