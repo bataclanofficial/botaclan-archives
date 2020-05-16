@@ -57,7 +57,7 @@ def find_event_by_name(credentials: service_account.Credentials, name: str):
         .execute()
     )
     events = events_result.get("items", [])
-    return next(iter(events), {})
+    return botaclan.helpers.lists.get_first_item(events)
 
 
 if __name__ == "__main__":

@@ -1,9 +1,13 @@
-from discord.ext.commands import Cog, Bot, Context, group
 from discord import Embed
+from discord.ext.commands import Cog, Bot, Context, group
 from google.oauth2 import service_account
-import logging
-import botaclan.google.google_calendar as cal
 import botaclan.google.auth
+import botaclan.google.google_calendar as cal
+import dateparser.search
+import botaclan.helpers.lists
+import botaclan.helpers.date
+import logging
+import re
 
 log = logging.getLogger(__name__)
 
@@ -31,11 +35,36 @@ class Calendar(Cog):
         await ctx.send(embed=embed)
 
     @event_group.command(name="create", aliases=["add"])
-    async def create_event(self, ctx: Context, start: str, end: str, *, summary: str):
+    async def create_event(self, ctx: Context, *, content: str):
+        dates_found = dateparser.search.search_dates(
+            content, settings={"PREFER_DATES_FROM": "future"}
+        )
+        log.debug(dates_found)
+        if len(dates_found) != 2:
+            return await ctx.send(
+                content="Your event is expected to have a start and an end date :("
+            )
+
+        start = botaclan.helpers.date.create_tuple_from_dateparser_found(dates_found[0])
+        end = botaclan.helpers.date.create_tuple_from_dateparser_found(dates_found[1])
+
+        regex_datetimes = "|".join([start.content, end.content])
+        content_without_datetimes = re.split(regex_datetimes, content)
+        summary = botaclan.helpers.lists.get_first_item(content_without_datetimes)
+
+        if not summary:
+            return await ctx.send(content="Your event is missing a summary :(")
+
         event = {
-            "start": {"dateTime": start, "timeZone": botaclan.constants.TIMEZONE},
-            "end": {"dateTime": end, "timeZone": botaclan.constants.TIMEZONE},
-            "summary": summary,
+            "start": {
+                "dateTime": start.datetime.isoformat(),
+                "timeZone": botaclan.constants.TIMEZONE,
+            },
+            "end": {
+                "dateTime": end.datetime.isoformat(),
+                "timeZone": botaclan.constants.TIMEZONE,
+            },
+            "summary": summary.strip(),
         }
         cal.create_event(self.credentials, event)
         await ctx.send(content="Event created! :D")
