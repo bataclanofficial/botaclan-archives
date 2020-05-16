@@ -40,19 +40,34 @@ class Calendar(Cog):
             content, settings={"PREFER_DATES_FROM": "future"}
         )
         log.debug(dates_found)
-        if len(dates_found) != 2:
+
+        if not dates_found:
+            log.warn(f"{content} - Problem parsing and searching a date range")
             return await ctx.send(
                 content="Your event is expected to have a start and an end date :("
             )
 
-        start = botaclan.helpers.date.create_tuple_from_dateparser_found(dates_found[0])
-        end = botaclan.helpers.date.create_tuple_from_dateparser_found(dates_found[1])
+        required_amount_of_dates = 2
+        if len(dates_found) != required_amount_of_dates:
+            log.warn(f"{content} - Less than 2 dates were specified")
+            return await ctx.send(
+                content="Your event is expected to have a start and an end date :("
+            )
+
+        start, end = map(
+            botaclan.helpers.date.create_tuple_from_dateparser_found, dates_found
+        )
+        if not start or not end:
+            log.warn(f"{content} - Start date or end date failed to be parsed")
+            return await ctx.send(
+                content="Your event is expected to have a start and an end date :("
+            )
 
         regex_datetimes = "|".join([start.content, end.content])
         content_without_datetimes = re.split(regex_datetimes, content)
         summary = botaclan.helpers.lists.get_first_item(content_without_datetimes)
-
         if not summary:
+            log.warn(f"{content} - Event missing summary")
             return await ctx.send(content="Your event is missing a summary :(")
 
         event = {
@@ -66,6 +81,7 @@ class Calendar(Cog):
             },
             "summary": summary.strip(),
         }
+        log.debug(event)
         cal.create_event(self.credentials, event)
         await ctx.send(content="Event created! :D")
 
