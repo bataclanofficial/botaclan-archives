@@ -39,6 +39,7 @@ def set_cli_arguments():
         help="Log level to be used",
         type=str,
         choices=default.SUPPORTED_LOG_LEVELS,
+        default=default.LOG_LEVEL,
         nargs="?",
     )
     p.add_argument(
