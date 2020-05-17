@@ -1,5 +1,6 @@
 from discord.ext import commands
 import botaclan.constants
+import botaclan.healthcheck.server
 import discord
 import logging
 
@@ -23,4 +24,5 @@ async def on_ready():
     log.info(f"{bot.user} connected to the following guild {guild.name}({guild.id}):")
 
 
+bot.loop.create_task(botaclan.healthcheck.server.create_server().serve())
 bot.run(botaclan.constants.DISCORD_TOKEN)
