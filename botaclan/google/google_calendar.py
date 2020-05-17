@@ -7,9 +7,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-def list_events(
-    credentials: service_account.Credentials, max_results: int = 10, q: str = None
-):
+def list_events(credentials: service_account.Credentials, max_results: int = 10):
     cal = build("calendar", "v3", credentials=credentials, cache_discovery=False)
     now = datetime.datetime.utcnow().isoformat() + "Z"
     events_result = (
