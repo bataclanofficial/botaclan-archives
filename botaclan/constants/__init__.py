@@ -1,0 +1,132 @@
+from vyper import v
+import argparse
+import logging
+import botaclan.constants.default as default
+
+
+log = logging.getLogger(__name__)
+
+
+def setup():
+    set_default_values()
+    set_environment_variables()
+    set_cli_arguments()
+    set_config_extensions()
+    if config_file := v.get("config.file"):
+        read_config_file(config_file)
+    else:
+        find_config_file()
+
+
+def set_cli_arguments():
+    p = argparse.ArgumentParser(description="Bataclan's official bot")
+    p.add_argument(
+        "--feature.calendar",
+        help="Enables Calendar feature",
+        type=bool,
+        default=default.FEATURE_ROULETTE,
+        nargs="?",
+    )
+    p.add_argument(
+        "--feature.roulette",
+        help="Enables Roulette feature",
+        type=bool,
+        default=default.FEATURE_ROULETTE,
+        nargs="?",
+    )
+    p.add_argument(
+        "--log.level",
+        help="Log level to be used",
+        type=str,
+        choices=default.SUPPORTED_LOG_LEVELS,
+        nargs="?",
+    )
+    p.add_argument(
+        "--config.file", help="Path to the YAML configuration", type=str, nargs="?",
+    )
+    v.bind_args(p)
+
+
+def find_config_file():
+    v.set_config_name(default.CONFIG_FILENAME)
+    for supported_path in default.SUPPORTED_CONFIG_PATHS:
+        v.add_config_path(supported_path)
+    try:
+        v.read_in_config()
+    except Exception:
+        log.warning(
+            "No configuration file was found. "
+            "Some tweaks may be missing or were provided through environment variables."
+        )
+
+
+def read_config_file(path: str):
+    try:
+        with open(path, "r") as file_content:
+            content = file_content.read()
+    except Exception:
+        log.critical("No configuration file was found with the provided path.")
+        exit(1)
+    v.read_config(content)
+
+
+def set_config_extensions():
+    for ext in default.SUPPORTED_CONFIG_EXTENSIONS:
+        v.set_config_type(ext)
+
+
+def set_environment_variables():
+    v.set_env_prefix("botaclan")
+    v.set_env_key_replacer(".", "_")
+    v.automatic_env()
+
+
+def set_default_values():
+    v.set_default("command.prefix", default.COMMAND_PREFIX)
+    v.set_default("feature.calendar", default.FEATURE_CALENDAR)
+    v.set_default("feature.roulette", default.FEATURE_ROULETTE)
+    v.set_default(
+        "googleapi.application.credentials", default.GOOGLEAPI_APPLICATION_CREDENTIALS
+    )
+    v.set_default("googleapi.calendar.id", default.GOOGLEAPI_CALENDAR_ID)
+    v.set_default("log.asyncio.level", default.LOG_ASYNCIO_LEVEL)
+    v.set_default("log.discord.level", default.LOG_DISCORD_LEVEL)
+    v.set_default("log.level", default.LOG_LEVEL)
+    v.set_default("log.websockets.level", default.LOG_WEBSOCKETS_LEVEL)
+    v.set_default("sentry.enabled", default.SENTRY_ENABLED)
+    v.set_default("timezone", default.TIMEZONE)
+
+
+def log_constants():
+    log.debug(f"command.prefix={COMMAND_PREFIX}")
+    log.debug(f"discord.guild.id={DISCORD_GUILD_ID}")
+    log.debug(f"discord.token={DISCORD_TOKEN}")
+    log.debug(f"feature.calendar={FEATURE_CALENDAR}")
+    log.debug(f"feature.roulette={FEATURE_ROULETTE}")
+    log.debug(f"googleapi.application.credentials={GOOGLEAPI_APPLICATION_CREDENTIALS}")
+    log.debug(f"googleapi.calendar.id={GOOGLEAPI_CALENDAR_ID}")
+    log.debug(f"log.asyncio.level={LOG_ASYNCIO_LEVEL}")
+    log.debug(f"log.discord.level={LOG_DISCORD_LEVEL}")
+    log.debug(f"log.level={LOG_LEVEL}")
+    log.debug(f"log.websockets.level={LOG_WEBSOCKETS_LEVEL}")
+    log.debug(f"sentry.dsn={SENTRY_DSN}")
+    log.debug(f"sentry.enabled={SENTRY_ENABLED}")
+    log.debug(f"timezone={TIMEZONE}")
+
+
+setup()
+
+COMMAND_PREFIX = v.get_string("command.prefix")
+DISCORD_GUILD_ID = v.get_int("discord.guild.id")
+DISCORD_TOKEN = v.get_string("discord.token")
+FEATURE_CALENDAR = v.get_bool("feature.calendar")
+FEATURE_ROULETTE = v.get_bool("feature.roulette")
+GOOGLEAPI_APPLICATION_CREDENTIALS = v.get_string("googleapi.application.credentials")
+GOOGLEAPI_CALENDAR_ID = v.get_string("googleapi.calendar.id")
+LOG_ASYNCIO_LEVEL = v.get_string("log.asyncio.level").upper()
+LOG_DISCORD_LEVEL = v.get_string("log.discord.level").upper()
+LOG_LEVEL = v.get_string("log.level").upper()
+LOG_WEBSOCKETS_LEVEL = v.get_string("log.websockets.level").upper()
+SENTRY_DSN = v.get_string("sentry.dsn")
+SENTRY_ENABLED = v.get_string("sentry.enabled")
+TIMEZONE = v.get_string("timezone")

@@ -18,7 +18,7 @@ logging.getLogger("discord").setLevel(botaclan.constants.LOG_DISCORD_LEVEL)
 logging.getLogger("websockets").setLevel(botaclan.constants.LOG_WEBSOCKETS_LEVEL)
 logging.getLogger(__name__)
 
+botaclan.constants.log_constants()
+
 if botaclan.constants.SENTRY_ENABLED:
     sentry_sdk.init(dsn=botaclan.constants.SENTRY_DSN)
-
-botaclan.constants.log_constants()
