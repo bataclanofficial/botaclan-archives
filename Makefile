@@ -2,7 +2,7 @@ PYTEST=pytest
 
 all: test
 
-test:
-		$(PYTEST) --disable-warnings -vv -s .
+test: unit-test
+
 unit-test:
 	$(PYTEST) --disable-warnings -vv -s .
