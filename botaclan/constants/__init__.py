@@ -10,8 +10,9 @@ log = logging.getLogger(__name__)
 def setup():
     set_default_values()
     set_environment_variables()
-    set_cli_arguments()
-    set_config_extensions()
+    if not v.is_set("disable.cli"):
+        set_cli_arguments()
+    set_config_file_extensions()
     if config_file := v.get("config.file"):
         read_config_file(config_file)
     else:
@@ -41,7 +42,7 @@ def find_config_file():
         )
 
 
-def set_config_extensions():
+def set_config_file_extensions():
     for ext in default.SUPPORTED_CONFIG_EXTENSIONS:
         v.set_config_type(ext)
 

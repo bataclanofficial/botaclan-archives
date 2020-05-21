@@ -5,4 +5,4 @@ all: test
 test: unit-test
 
 unit-test:
-	$(PYTEST) --disable-warnings -vv -s .
+	BOTACLAN_DISABLE_CLI="" $(PYTEST) --disable-warnings -vv -s .
