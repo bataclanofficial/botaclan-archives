@@ -1,6 +1,7 @@
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-import botaclan.constants
+from botaclan.constants import GOOGLEAPI_CALENDAR_ID
+import botaclan.helpers as helpers
 import datetime
 import logging
 
@@ -13,7 +14,7 @@ def list_events(credentials: service_account.Credentials, max_results: int = 10)
     events_result = (
         cal.events()
         .list(
-            calendarId=botaclan.constants.GOOGLEAPI_CALENDAR_ID,
+            calendarId=GOOGLEAPI_CALENDAR_ID,
             timeMin=now,
             maxResults=max_results,
             singleEvents=True,
@@ -27,16 +28,12 @@ def list_events(credentials: service_account.Credentials, max_results: int = 10)
 
 def create_event(credentials: service_account.Credentials, event: dict):
     cal = build("calendar", "v3", credentials=credentials, cache_discovery=False)
-    cal.events().insert(
-        calendarId=botaclan.constants.GOOGLEAPI_CALENDAR_ID, body=event
-    ).execute()
+    cal.events().insert(calendarId=GOOGLEAPI_CALENDAR_ID, body=event).execute()
 
 
 def delete_event(credentials: service_account.Credentials, id: str):
     cal = build("calendar", "v3", credentials=credentials, cache_discovery=False)
-    cal.events().delete(
-        calendarId=botaclan.constants.GOOGLEAPI_CALENDAR_ID, eventId=id
-    ).execute()
+    cal.events().delete(calendarId=GOOGLEAPI_CALENDAR_ID, eventId=id).execute()
 
 
 def find_event_by_name(credentials: service_account.Credentials, name: str):
@@ -45,7 +42,7 @@ def find_event_by_name(credentials: service_account.Credentials, name: str):
     events_result = (
         cal.events()
         .list(
-            calendarId=botaclan.constants.GOOGLEAPI_CALENDAR_ID,
+            calendarId=GOOGLEAPI_CALENDAR_ID,
             timeMin=now,
             maxResults=1,
             singleEvents=True,
@@ -55,7 +52,7 @@ def find_event_by_name(credentials: service_account.Credentials, name: str):
         .execute()
     )
     events = events_result.get("items", [])
-    return botaclan.helpers.lists.get_first_item(events)
+    return helpers.lists.get_first_item(events)
 
 
 if __name__ == "__main__":

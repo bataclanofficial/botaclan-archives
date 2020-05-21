@@ -1,24 +1,21 @@
 from importlib_metadata import version
-import botaclan.constants
+from botaclan.constants import (
+    LOG_LEVEL,
+    LOG_ASYNCIO_LEVEL,
+    LOG_DISCORD_LEVEL,
+    LOG_WEBSOCKETS_LEVEL,
+)
 import coloredlogs
 import logging
-import sentry_sdk
 import sys
 
 __version__ = version(__package__)
 
 root_log = logging.getLogger()
-root_log.setLevel(botaclan.constants.LOG_LEVEL)
-coloredlogs.install(
-    logger=root_log, stream=sys.stdout, level=botaclan.constants.LOG_LEVEL
-)
+root_log.setLevel(LOG_LEVEL)
+coloredlogs.install(logger=root_log, stream=sys.stdout, level=LOG_LEVEL)
 logging.Formatter("%(asctime)s | %(name)s | %(levelname)s | %(message)s")
-logging.getLogger("asyncio").setLevel(botaclan.constants.LOG_ASYNCIO_LEVEL)
-logging.getLogger("discord").setLevel(botaclan.constants.LOG_DISCORD_LEVEL)
-logging.getLogger("websockets").setLevel(botaclan.constants.LOG_WEBSOCKETS_LEVEL)
+logging.getLogger("asyncio").setLevel(LOG_ASYNCIO_LEVEL)
+logging.getLogger("discord").setLevel(LOG_DISCORD_LEVEL)
+logging.getLogger("websockets").setLevel(LOG_WEBSOCKETS_LEVEL)
 logging.getLogger(__name__)
-
-botaclan.constants.log_constants()
-
-if botaclan.constants.SENTRY_ENABLED:
-    sentry_sdk.init(dsn=botaclan.constants.SENTRY_DSN)

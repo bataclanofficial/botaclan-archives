@@ -1,5 +1,9 @@
 from fastapi import FastAPI
-import botaclan.constants
+from botaclan.constants import (
+    HEALTHCHECK_HOST,
+    HEALTHCHECK_PORT,
+    LOG_UVICORN_LEVEL,
+)
 import uvicorn
 import logging
 
@@ -10,11 +14,11 @@ app = FastAPI()
 def create_server():
     config = uvicorn.Config(
         "botaclan.healthcheck.server:app",
-        host=botaclan.constants.HEALTHCHECK_HOST,
+        host=HEALTHCHECK_HOST,
         log_config=None,
-        log_level=botaclan.constants.LOG_UVICORN_LEVEL,
+        log_level=LOG_UVICORN_LEVEL,
         loop="asyncio",
-        port=botaclan.constants.HEALTHCHECK_PORT,
+        port=HEALTHCHECK_PORT,
     )
     return uvicorn.Server(config=config)
 

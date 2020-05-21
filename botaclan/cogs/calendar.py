@@ -1,11 +1,14 @@
 from discord import Embed
 from discord.ext.commands import Cog, Bot, Context, group
+from botaclan.constants import (
+    GOOGLEAPI_APPLICATION_CREDENTIALS,
+    TIMEZONE,
+)
 from google.oauth2 import service_account
 import botaclan.google.auth
 import botaclan.google.google_calendar as cal
+import botaclan.helpers as helpers
 import dateparser.search
-import botaclan.helpers.lists
-import botaclan.helpers.date
 import logging
 import re
 
@@ -54,9 +57,7 @@ class Calendar(Cog):
                 content="Your event is expected to have a start and an end date :("
             )
 
-        start, end = map(
-            botaclan.helpers.date.create_tuple_from_dateparser_found, dates_found
-        )
+        start, end = map(helpers.date.create_tuple_from_dateparser_found, dates_found)
         if not start or not end:
             log.warn(f"{content} - Start date or end date failed to be parsed")
             return await ctx.send(
@@ -65,20 +66,14 @@ class Calendar(Cog):
 
         regex_datetimes = "|".join([start.content, end.content])
         content_without_datetimes = re.split(regex_datetimes, content)
-        summary = botaclan.helpers.lists.get_first_item(content_without_datetimes)
+        summary = helpers.lists.get_first_item(content_without_datetimes)
         if not summary:
             log.warn(f"{content} - Event missing summary")
             return await ctx.send(content="Your event is missing a summary :(")
 
         event = {
-            "start": {
-                "dateTime": start.datetime.isoformat(),
-                "timeZone": botaclan.constants.TIMEZONE,
-            },
-            "end": {
-                "dateTime": end.datetime.isoformat(),
-                "timeZone": botaclan.constants.TIMEZONE,
-            },
+            "start": {"dateTime": start.datetime.isoformat(), "timeZone": TIMEZONE},
+            "end": {"dateTime": end.datetime.isoformat(), "timeZone": TIMEZONE},
             "summary": summary.strip(),
         }
         log.debug(event)
@@ -97,7 +92,5 @@ class Calendar(Cog):
 
 def setup(bot: Bot) -> None:
     """Load the Calendar cog."""
-    creds = botaclan.google.auth.generate_credentials(
-        botaclan.constants.GOOGLEAPI_APPLICATION_CREDENTIALS
-    )
+    creds = botaclan.google.auth.generate_credentials(GOOGLEAPI_APPLICATION_CREDENTIALS)
     bot.add_cog(Calendar(bot, creds))
