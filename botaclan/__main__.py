@@ -6,11 +6,14 @@ from botaclan.constants import (
     SENTRY_DSN,
     SENTRY_ENABLED,
 )
+import asyncio
 import botaclan.constants
 import botaclan.healthcheck.server
 import discord
 import logging
 import sentry_sdk
+import signal
+
 
 log = logging.getLogger(__name__)
 
@@ -28,5 +31,15 @@ async def on_ready():
     log.info(f"{bot.user} connected to the following guild {guild.name}({guild.id}):")
 
 
-bot.loop.create_task(botaclan.healthcheck.server.create_server().serve())
+async def rewrite_signal(loop):
+    while True:
+        loop.add_signal_handler(signal.SIGINT, bot.loop.stop)
+        loop.add_signal_handler(signal.SIGTERM, bot.loop.stop)
+        await asyncio.sleep(1)
+
+
+server = botaclan.healthcheck.server.create_server()
+
+bot.loop.create_task(server.serve())
+bot.loop.create_task(rewrite_signal(bot.loop))
 bot.run(DISCORD_TOKEN)
