@@ -1,4 +1,3 @@
-from fastapi import FastAPI
 from botaclan.constants import (
     HEALTHCHECK_HOST,
     HEALTHCHECK_PORT,
@@ -8,12 +7,11 @@ import uvicorn
 import logging
 
 log = logging.getLogger(__name__)
-app = FastAPI()
 
 
 def create_server():
     config = uvicorn.Config(
-        "botaclan.healthcheck.server:app",
+        "botaclan.healthcheck.routes:app",
         host=HEALTHCHECK_HOST,
         log_config=None,
         log_level=LOG_UVICORN_LEVEL,
@@ -21,8 +19,3 @@ def create_server():
         port=HEALTHCHECK_PORT,
     )
     return uvicorn.Server(config=config)
-
-
-@app.get("/")
-def read_root():
-    return "Nothing to be found here"

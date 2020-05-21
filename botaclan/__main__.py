@@ -6,14 +6,13 @@ from botaclan.constants import (
     SENTRY_DSN,
     SENTRY_ENABLED,
 )
-import asyncio
 import botaclan.constants
 import botaclan.healthcheck.server
 import discord
 import logging
 import sentry_sdk
+import asyncio
 import signal
-
 
 log = logging.getLogger(__name__)
 
@@ -23,6 +22,7 @@ if SENTRY_ENABLED:
     sentry_sdk.init(dsn=SENTRY_DSN)
 
 bot = Botaclan(command_prefix=COMMAND_PREFIX, case_insensitive=True)
+botaclan.bot.running_bot = bot
 
 
 @bot.event

@@ -7,6 +7,8 @@ import logging
 
 log = logging.getLogger(__name__)
 
+running_bot = None
+
 COGS_AND_FEATURE_STATUS = {
     "botaclan.cogs.roulette": FEATURE_ROULETTE,
     "botaclan.cogs.calendar": FEATURE_CALENDAR,
