@@ -1,7 +1,7 @@
 from vyper import v
 import argparse
-import logging
 import botaclan.constants.default as default
+import logging
 
 
 log = logging.getLogger(__name__)

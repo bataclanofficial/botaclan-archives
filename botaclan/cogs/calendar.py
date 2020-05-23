@@ -1,9 +1,9 @@
 from discord import Embed
-from discord.ext.commands import Cog, Bot, Context, group
 from botaclan.constants import (
     GOOGLEAPI_APPLICATION_CREDENTIALS,
     TIMEZONE,
 )
+from discord.ext.commands import Cog, Bot, Context, group
 from google.oauth2 import service_account
 import botaclan.google.auth
 import botaclan.google.google_calendar as cal

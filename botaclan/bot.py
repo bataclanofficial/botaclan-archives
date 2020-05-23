@@ -3,9 +3,9 @@ from botaclan.constants import (
     FEATURE_CALENDAR,
 )
 from discord.ext.commands import Bot
+import asyncio
 import logging
 import signal
-import asyncio
 
 log = logging.getLogger(__name__)
 
