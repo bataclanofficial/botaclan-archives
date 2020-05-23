@@ -7,7 +7,8 @@ from botaclan.constants import (
 from google.oauth2 import service_account
 import botaclan.google.auth
 import botaclan.google.google_calendar as cal
-import botaclan.helpers as helpers
+import botaclan.helpers.date
+import botaclan.helpers.lists
 import dateparser.search
 import logging
 import re
@@ -57,7 +58,9 @@ class Calendar(Cog):
                 content="Your event is expected to have a start and an end date :("
             )
 
-        start, end = map(helpers.date.create_tuple_from_dateparser_found, dates_found)
+        start, end = map(
+            botaclan.helpers.date.create_tuple_from_dateparser_found, dates_found
+        )
         if not start or not end:
             log.warn(f"{content} - Start date or end date failed to be parsed")
             return await ctx.send(
@@ -66,7 +69,7 @@ class Calendar(Cog):
 
         regex_datetimes = "|".join([start.content, end.content])
         content_without_datetimes = re.split(regex_datetimes, content)
-        summary = helpers.lists.get_first_item(content_without_datetimes)
+        summary = botaclan.helpers.lists.get_first_item(content_without_datetimes)
         if not summary:
             log.warn(f"{content} - Event missing summary")
             return await ctx.send(content="Your event is missing a summary :(")
@@ -82,11 +85,10 @@ class Calendar(Cog):
 
     @event_group.command(name="delete", aliases=["del"])
     async def delete_event(self, ctx: Context, *, summary: str):
-        event_id = cal.find_event_by_name(self.credentials, summary).get("id")
-        if not event_id:
+        event = cal.find_event_by_name(self.credentials, summary)
+        if not event:
             return await ctx.send(content="No event was found! :s")
-
-        cal.delete_event(self.credentials, event_id)
+        cal.delete_event(self.credentials, event.get("id"))
         await ctx.send(content="Event deleted! :(")
 
 

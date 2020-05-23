@@ -1,10 +1,10 @@
-from importlib_metadata import version
 from botaclan.constants import (
     LOG_LEVEL,
     LOG_ASYNCIO_LEVEL,
     LOG_DISCORD_LEVEL,
     LOG_WEBSOCKETS_LEVEL,
 )
+from importlib_metadata import version
 import coloredlogs
 import logging
 import sys

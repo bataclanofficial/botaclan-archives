@@ -3,7 +3,7 @@ import botaclan.helpers.lists
 
 def test_get_first_item_empty_list():
     sent = []
-    expected = {}
+    expected = None
 
     assert botaclan.helpers.lists.get_first_item(sent) == expected
 

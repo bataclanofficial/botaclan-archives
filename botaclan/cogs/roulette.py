@@ -1,7 +1,7 @@
 from discord.ext.commands import Cog, Bot, Context, group
 import botaclan.helpers.text
-import random
 import logging
+import random
 
 log = logging.getLogger(__name__)
 

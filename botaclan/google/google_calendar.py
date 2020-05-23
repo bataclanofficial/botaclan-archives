@@ -1,15 +1,23 @@
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
 from botaclan.constants import GOOGLEAPI_CALENDAR_ID
-import botaclan.helpers as helpers
+from google.oauth2 import service_account
+from googleapiclient.discovery import build, Resource
+from typing import List, Dict
+import botaclan.helpers.lists
 import datetime
 import logging
+
 
 log = logging.getLogger(__name__)
 
 
-def list_events(credentials: service_account.Credentials, max_results: int = 10):
-    cal = build("calendar", "v3", credentials=credentials, cache_discovery=False)
+def create_calendar_client(credentials: service_account.Credentials,) -> Resource:
+    return build("calendar", "v3", credentials=credentials, cache_discovery=False)
+
+
+def list_events(
+    credentials: service_account.Credentials, max_results: int = 10
+) -> List[Dict]:
+    cal = create_calendar_client(credentials=credentials)
     now = datetime.datetime.utcnow().isoformat() + "Z"
     events_result = (
         cal.events()
@@ -27,17 +35,17 @@ def list_events(credentials: service_account.Credentials, max_results: int = 10)
 
 
 def create_event(credentials: service_account.Credentials, event: dict):
-    cal = build("calendar", "v3", credentials=credentials, cache_discovery=False)
+    cal = create_calendar_client(credentials=credentials)
     cal.events().insert(calendarId=GOOGLEAPI_CALENDAR_ID, body=event).execute()
 
 
 def delete_event(credentials: service_account.Credentials, id: str):
-    cal = build("calendar", "v3", credentials=credentials, cache_discovery=False)
+    cal = create_calendar_client(credentials=credentials)
     cal.events().delete(calendarId=GOOGLEAPI_CALENDAR_ID, eventId=id).execute()
 
 
-def find_event_by_name(credentials: service_account.Credentials, name: str):
-    cal = build("calendar", "v3", credentials=credentials, cache_discovery=False)
+def find_event_by_name(credentials: service_account.Credentials, name: str) -> Dict:
+    cal = create_calendar_client(credentials=credentials)
     now = datetime.datetime.utcnow().isoformat() + "Z"
     events_result = (
         cal.events()
@@ -52,7 +60,7 @@ def find_event_by_name(credentials: service_account.Credentials, name: str):
         .execute()
     )
     events = events_result.get("items", [])
-    return helpers.lists.get_first_item(events)
+    return botaclan.helpers.lists.get_first_item(events)
 
 
 if __name__ == "__main__":

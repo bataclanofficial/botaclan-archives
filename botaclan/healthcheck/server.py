@@ -3,13 +3,13 @@ from botaclan.constants import (
     HEALTHCHECK_PORT,
     LOG_UVICORN_LEVEL,
 )
-import uvicorn
 import logging
+import uvicorn
 
 log = logging.getLogger(__name__)
 
 
-def create_server():
+def create_server() -> uvicorn.Server:
     config = uvicorn.Config(
         "botaclan.healthcheck.routes:app",
         host=HEALTHCHECK_HOST,

@@ -56,20 +56,6 @@ def set_environment_variables():
 def set_cli_arguments():
     p = argparse.ArgumentParser(description="Bataclan's official bot")
     p.add_argument(
-        "--feature.calendar",
-        help="Enables Calendar feature",
-        type=bool,
-        default=default.FEATURE_ROULETTE,
-        nargs="?",
-    )
-    p.add_argument(
-        "--feature.roulette",
-        help="Enables Roulette feature",
-        type=bool,
-        default=default.FEATURE_ROULETTE,
-        nargs="?",
-    )
-    p.add_argument(
         "--healthcheck.host",
         help="Host used to spawn the heathcheck server",
         type=str,

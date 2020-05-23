@@ -1,9 +1,11 @@
-from discord.ext.commands import Bot
 from botaclan.constants import (
     FEATURE_ROULETTE,
     FEATURE_CALENDAR,
 )
+from discord.ext.commands import Bot
 import logging
+import signal
+import asyncio
 
 log = logging.getLogger(__name__)
 
@@ -25,3 +27,9 @@ class Botaclan(Bot):
             if status:
                 log.debug(f"Loading cog - {cog}")
                 self.load_extension(cog)
+
+    async def rewrite_signal(self):
+        while True:
+            self.loop.add_signal_handler(signal.SIGINT, self.loop.stop)
+            self.loop.add_signal_handler(signal.SIGTERM, self.loop.stop)
+            await asyncio.sleep(1)
