@@ -26,3 +26,4 @@ class Roulette(Cog):
 def setup(bot: Bot) -> None:
     """Load the Roulette cog."""
     bot.add_cog(Roulette(bot))
+    log.info("Cog loaded: Roulette")

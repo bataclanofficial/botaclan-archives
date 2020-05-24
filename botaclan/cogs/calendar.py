@@ -138,3 +138,4 @@ def setup(bot: Bot) -> None:
     """Load the Calendar cog."""
     creds = botaclan.google.auth.generate_credentials(GOOGLEAPI_APPLICATION_CREDENTIALS)
     bot.add_cog(Calendar(bot, creds))
+    log.info("Cog loaded: Calendar")
