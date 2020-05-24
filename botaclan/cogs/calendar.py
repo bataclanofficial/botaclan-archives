@@ -5,6 +5,7 @@ from botaclan.constants import (
 )
 from discord.ext.commands import Cog, Bot, Context, group
 from google.oauth2 import service_account
+import botaclan.constants.default as default
 import botaclan.google.auth
 import botaclan.google.google_calendar as cal
 import botaclan.helpers.date
@@ -12,6 +13,7 @@ import botaclan.helpers.lists
 import dateparser.search
 import logging
 import re
+
 
 log = logging.getLogger(__name__)
 
@@ -25,6 +27,11 @@ class Calendar(Cog):
     async def event_group(self, ctx: Context):
         if ctx.invoked_subcommand is None:
             await ctx.send(content="Event help here")
+
+    @group(name="calendar")
+    async def calendar_group(self, ctx: Context):
+        if ctx.invoked_subcommand is None:
+            await ctx.send(content="Calendar help here")
 
     @event_group.command(name="list", aliases=["ls"])
     async def list_events(self, ctx: Context):
@@ -90,6 +97,41 @@ class Calendar(Cog):
             return await ctx.send(content="No event was found! :s")
         cal.delete_event(self.credentials, event.get("id"))
         await ctx.send(content="Event deleted! :(")
+
+    @calendar_group.command(name="subscribe", aliases=["sub"])
+    async def subscribe_to_calendar(self, ctx: Context, role: str, email: str):
+        if (
+            role not in default.SUPPORTED_GOOGLEAPI_CALENDAR_ROLES
+            or not botaclan.helpers.text.validate_email_address(email)
+        ):
+            return await ctx.send(content="Enter a valid email address and role :(")
+        generated_rule = cal.generate_user_acl_rule(role, email)
+        cal.subscribe_to_calendar(self.credentials, generated_rule)
+        await ctx.send(
+            content=(
+                "User subscribed to the calendar. "
+                "A confirmation email was sent and needs to be accepted :)"
+            )
+        )
+
+    @calendar_group.command(name="unsubscribe", aliases=["unsub"])
+    async def unsubscribe_to_calendar(self, ctx: Context, role: str, email: str):
+        if (
+            role not in default.SUPPORTED_GOOGLEAPI_CALENDAR_ROLES
+            or not botaclan.helpers.text.validate_email_address(email)
+        ):
+            return await ctx.send(content="Enter a valid email address and role :(")
+        generated_rule = cal.generate_user_acl_rule(role, email)
+
+        rules_found = cal.find_acl_by_rule(self.credentials, generated_rule)
+        if not rules_found:
+            return await ctx.send(
+                content="No user was found with this permission and email :s"
+            )
+
+        for rule in rules_found:
+            cal.unsubscribe_to_calendar(self.credentials, rule.get("id", None))
+        await ctx.send(content="User unsubscribed to the calendar :)")
 
 
 def setup(bot: Bot) -> None:

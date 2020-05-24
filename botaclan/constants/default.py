@@ -15,4 +15,5 @@ SENTRY_ENABLED = False
 SUPPORTED_CONFIG_EXTENSIONS = ["yaml"]
 SUPPORTED_CONFIG_PATHS = ["/etc/botaclan/", "$HOME/.botaclan/", "."]
 SUPPORTED_LOG_LEVELS = ["critical", "error", "warning", "info", "debug"]
+SUPPORTED_GOOGLEAPI_CALENDAR_ROLES = ["owner", "writer", "reader"]
 TIMEZONE = "America/Sao_Paulo"
