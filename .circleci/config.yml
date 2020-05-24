@@ -1,0 +1,20 @@
+version: 2.1
+
+orbs:
+  linter: thekevjames/linter@1.0.60
+  poetry: frameio/poetry@0.14.3
+  python: circleci/python@0.2.1
+
+workflows:
+  ci:
+    jobs:
+      - linter/pre-commit
+      - poetry/install:
+          before_install:
+            - run:
+                command: poetry config virtualenvs.create false
+                name: Disable poetry virtualenv creation
+          after_install:
+            - run:
+                command: make unit-test
+                name: Unit Tests
