@@ -1,11 +1,14 @@
 from botaclan.constants import (
-    FEATURE_ROULETTE,
+    DISCORD_GUILD_ID,
     FEATURE_CALENDAR,
+    FEATURE_ROULETTE,
 )
 from discord.ext.commands import Bot
+import discord.utils
 import asyncio
 import logging
 import signal
+
 
 log = logging.getLogger(__name__)
 
@@ -21,6 +24,12 @@ class Botaclan(Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.load_cogs()
+
+    async def on_ready(self):
+        guild = discord.utils.find(lambda g: g.id == DISCORD_GUILD_ID, self.guilds)
+        log.info(
+            f"{self.user} connected to the following guild {guild.name}({guild.id}):"
+        )
 
     def load_cogs(self):
         for cog, status in COGS_AND_FEATURE_STATUS.items():
