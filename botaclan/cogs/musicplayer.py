@@ -1,5 +1,6 @@
 from discord.ext.commands import Cog, Bot, Context, group, CommandError
 import botaclan.player.soundcloud as sc
+import botaclan.player.spotify as sptf
 import botaclan.player.youtube as yt
 import discord
 import logging
@@ -46,6 +47,10 @@ class MusicPlayer(Cog):
                     after=lambda e: log.error("Player error: %s" % e) if e else None,
                 )
             await ctx.send(embed=sc_song.get_message())
+        if sptf.PROVIDER in content:
+            async with ctx.typing():
+                sptf_song = sptf.new_spotify_song(content, ctx)
+            await ctx.send(embed=sptf_song.get_message())
 
     @player_group.command(name="pause")
     async def pause(self, ctx: Context):
