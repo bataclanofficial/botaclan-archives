@@ -9,6 +9,8 @@ import youtube_dl
 youtube_dl.utils.bug_reports_message = lambda: ""
 
 PROVIDER = "youtube"
+PROVIDER_FRIENDLY = "YouTube"
+
 OPTIONS_FFMPEG = {"options": "-vn"}
 OPTIONS_YOUTUBE_DL = {
     "audioformat": "mp3",
@@ -32,8 +34,7 @@ class YoutubeSong:
     data: Dict
     description: str
     dislikes: int
-    duration: int
-    friendly_duration: str
+    duration_seconds: int
     likes: int
     stream_url: str
     thumbnail: str
@@ -48,7 +49,7 @@ class YoutubeSong:
         self.data = data
         self.description = data.get("description")
         self.dislikes = data.get("dislike_count")
-        self.duration = int(data.get("duration"))
+        self.duration_seconds = int(data.get("duration"))
         self.likes = data.get("like_count")
         self.stream_url = data.get("url")
         self.thumbnail = data.get("thumbnail")
@@ -68,14 +69,17 @@ class YoutubeSong:
             )
             .set_footer(
                 icon_url=self.ctx.message.author.avatar_url,
-                text=self.ctx.message.author.name,
+                text=(
+                    f"{self.ctx.message.author.name}"
+                    f" requested from {PROVIDER_FRIENDLY}"
+                ),
             )
             .set_thumbnail(url=self.thumbnail)
             .add_field(
                 name="Song stats",
                 value="\n".join(
                     [
-                        f":timer: {format_timespan(self.duration)}",
+                        f":timer: {format_timespan(self.duration_seconds)}",
                         f":eye: {format_number(self.views)} views",
                         f":thumbsup: {format_number(self.likes)} likes",
                         f":thumbsdown: {format_number(self.dislikes)} dislikes",

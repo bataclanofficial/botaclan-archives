@@ -121,6 +121,7 @@ def log_constants():
     log.debug(f"log.websockets.level={LOG_WEBSOCKETS_LEVEL}")
     log.debug(f"sentry.dsn={SENTRY_DSN}")
     log.debug(f"sentry.enabled={SENTRY_ENABLED}")
+    log.debug(f"soundcloud.client.id={SOUNDCLOUD_CLIENT_ID}")
     log.debug(f"timezone={TIMEZONE}")
 
 
@@ -143,4 +144,5 @@ LOG_UVICORN_LEVEL = v.get_string("log.uvicorn.level")
 LOG_WEBSOCKETS_LEVEL = v.get_string("log.websockets.level").upper()
 SENTRY_DSN = v.get_string("sentry.dsn")
 SENTRY_ENABLED = v.get_string("sentry.enabled")
+SOUNDCLOUD_CLIENT_ID = v.get_string("soundcloud.client.id")
 TIMEZONE = v.get_string("timezone")

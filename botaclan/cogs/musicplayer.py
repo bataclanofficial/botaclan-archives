@@ -1,5 +1,6 @@
 from discord.ext.commands import Cog, Bot, Context, group, CommandError
-import botaclan.player.youtube
+import botaclan.player.soundcloud as sc
+import botaclan.player.youtube as yt
 import discord
 import logging
 
@@ -29,13 +30,22 @@ class MusicPlayer(Cog):
 
     @player_group.command(name="play", aliases=["p"])
     async def play(self, ctx: Context, *, content: str):
-        async with ctx.typing():
-            yt_song = botaclan.player.youtube.new_youtube_song(content, ctx)
-            ctx.voice_client.play(
-                discord.PCMVolumeTransformer(yt_song.get_audio()),
-                after=lambda e: print("Player error: %s" % e) if e else None,
-            )
-        await ctx.send(embed=yt_song.get_message())
+        if yt.PROVIDER in content:
+            async with ctx.typing():
+                yt_song = yt.new_youtube_song(content, ctx)
+                ctx.voice_client.play(
+                    discord.PCMVolumeTransformer(yt_song.get_audio()),
+                    after=lambda e: log.error("Player error: %s" % e) if e else None,
+                )
+            await ctx.send(embed=yt_song.get_message())
+        if sc.PROVIDER in content:
+            async with ctx.typing():
+                sc_song = await sc.new_soundcloud_song(content, ctx)
+                ctx.voice_client.play(
+                    discord.PCMVolumeTransformer(await sc_song.get_audio()),
+                    after=lambda e: log.error("Player error: %s" % e) if e else None,
+                )
+            await ctx.send(embed=sc_song.get_message())
 
     @player_group.command(name="pause")
     async def pause(self, ctx: Context):

@@ -17,5 +17,5 @@ SUPPORTED_CONFIG_EXTENSIONS = ["yaml"]
 SUPPORTED_CONFIG_PATHS = ["/etc/botaclan/", "$HOME/.botaclan/", "."]
 SUPPORTED_GOOGLEAPI_CALENDAR_ROLES = ["owner", "writer", "reader"]
 SUPPORTED_LOG_LEVELS = ["critical", "error", "warning", "info", "debug"]
-SUPPORTED_MUSICPLAYER_PROVIDERS = ["youtube"]
+SUPPORTED_MUSICPLAYER_PROVIDERS = ["youtube", "soundcloud"]
 TIMEZONE = "America/Sao_Paulo"

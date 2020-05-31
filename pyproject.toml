@@ -40,6 +40,7 @@ uvicorn = "^0.11.5"
 youtube_dl = "^2020.5.8"
 django = "^3.0.6"
 humanfriendly = "^8.2"
+soundcloud-lib = "^0.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.1"
