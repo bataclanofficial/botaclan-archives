@@ -1,11 +1,12 @@
 from botaclan.constants import (
     DISCORD_GUILD_ID,
     FEATURE_CALENDAR,
+    FEATURE_MUSICPLAYER,
     FEATURE_ROULETTE,
 )
 from discord.ext.commands import Bot
-import discord.utils
 import asyncio
+import discord.utils
 import logging
 import signal
 
@@ -15,8 +16,9 @@ log = logging.getLogger(__name__)
 running_bot = None
 
 COGS_AND_FEATURE_STATUS = {
-    "botaclan.cogs.roulette": FEATURE_ROULETTE,
     "botaclan.cogs.calendar": FEATURE_CALENDAR,
+    "botaclan.cogs.musicplayer": FEATURE_MUSICPLAYER,
+    "botaclan.cogs.roulette": FEATURE_ROULETTE,
 }
 
 

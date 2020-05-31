@@ -86,6 +86,7 @@ def set_cli_arguments():
 def set_default_values():
     v.set_default("command.prefix", default.COMMAND_PREFIX)
     v.set_default("feature.calendar", default.FEATURE_CALENDAR)
+    v.set_default("feature.musicplayer", default.FEATURE_MUSICPLAYER)
     v.set_default("feature.roulette", default.FEATURE_ROULETTE)
     v.set_default(
         "googleapi.application.credentials", default.GOOGLEAPI_APPLICATION_CREDENTIALS
@@ -107,6 +108,7 @@ def log_constants():
     log.debug(f"discord.guild.id={DISCORD_GUILD_ID}")
     log.debug(f"discord.token={DISCORD_TOKEN}")
     log.debug(f"feature.calendar={FEATURE_CALENDAR}")
+    log.debug(f"feature.musicplayer={FEATURE_MUSICPLAYER}")
     log.debug(f"feature.roulette={FEATURE_ROULETTE}")
     log.debug(f"googleapi.application.credentials={GOOGLEAPI_APPLICATION_CREDENTIALS}")
     log.debug(f"googleapi.calendar.id={GOOGLEAPI_CALENDAR_ID}")
@@ -128,6 +130,7 @@ COMMAND_PREFIX = v.get_string("command.prefix")
 DISCORD_GUILD_ID = v.get_int("discord.guild.id")
 DISCORD_TOKEN = v.get_string("discord.token")
 FEATURE_CALENDAR = v.get_bool("feature.calendar")
+FEATURE_MUSICPLAYER = v.get_bool("feature.musicplayer")
 FEATURE_ROULETTE = v.get_bool("feature.roulette")
 GOOGLEAPI_APPLICATION_CREDENTIALS = v.get_string("googleapi.application.credentials")
 GOOGLEAPI_CALENDAR_ID = v.get_string("googleapi.calendar.id")
