@@ -1,0 +1,13 @@
+image:
+  file: .gitpod/Dockerfile
+
+ports:
+  - port: 8080
+    onOpen: ignore
+
+tasks:
+  - init: git config --global core.editor "vim"
+  - init: pre-commit install
+  - init: |
+      poetry config --local virtualenvs.in-project true;
+      poetry install
