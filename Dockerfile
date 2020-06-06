@@ -4,7 +4,6 @@ ENV PIP_NO_CACHE_DIR=false
 
 RUN apt update -y \
     && apt install -y git \
-    && apt install libspotify-dev \
     && rm -rf /var/lib/apt/*
 
 RUN pip install -U poetry

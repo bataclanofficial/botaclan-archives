@@ -4,9 +4,7 @@ from discord.ext.commands import Context
 from humanfriendly import format_timespan
 from spotipy.oauth2 import SpotifyClientCredentials
 from typing import Dict, List
-import botaclan
 import discord
-import spotify
 import spotipy
 
 
@@ -30,7 +28,7 @@ class SpotifySong:
     url: str
     views: int
 
-    def __init__(self, track: spotify.Track, ctx: Context):
+    def __init__(self, track: Dict, ctx: Context):
         self.ctx = ctx
         self.track = track
         self.artists = convert_artists_to_markdown_string(track.get("artists"))
@@ -70,16 +68,6 @@ def new_spotify_song(url, ctx: Context) -> SpotifySong:
     spotipy_session = get_spotipy_session(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
     track = spotipy_session.track(url)
     return SpotifySong(track, ctx)
-
-
-def get_pyspotify_session(client_id: str, client_secret: str) -> spotify.Session:
-    config = spotify.Config()
-    config.user_agent = f"{botaclan.__name__} {botaclan.__version__}"
-
-    session = spotify.Session(config)
-    session.login(client_id, client_secret)
-    session.preferred_bitrate(spotify.Bitrate.BITRATE_320k)
-    return session
 
 
 def get_spotipy_session(client_id: str, client_secret: str) -> spotipy.Spotify:
